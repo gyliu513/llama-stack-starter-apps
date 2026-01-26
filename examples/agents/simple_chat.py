@@ -11,7 +11,7 @@ import fire
 from llama_stack_client import LlamaStackClient, Agent, AgentEventLogger
 from termcolor import colored
 
-from .utils import check_model_is_available, get_any_available_model
+from .utils import check_model_is_available, get_any_available_chat_model
 
 
 def main(host: str, port: int, model_id: str | None = None):
@@ -36,7 +36,7 @@ def main(host: str, port: int, model_id: str | None = None):
         print(f"Available shields found: {available_shields}")
 
     if model_id is None:
-        model_id = get_any_available_model(client)
+        model_id = get_any_available_chat_model(client)
         if model_id is None:
             return
     else:
