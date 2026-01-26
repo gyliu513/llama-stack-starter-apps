@@ -42,9 +42,11 @@ def _get_vector_provider(client: LlamaStackClient, provider_id: str | None):
         print(colored("No available vector_io providers. Exiting.", "red"))
         return None
     if provider_id is None:
+        print(f"Using default vector provider: {vector_providers[0].provider_id}")
         return vector_providers[0]
     for provider in vector_providers:
         if provider.provider_id == provider_id:
+            print(f"Using specified vector provider: {provider.provider_id}")
             return provider
     available = [provider.provider_id for provider in vector_providers]
     print(colored(f"Vector provider `{provider_id}` not found. Available: {available}", "red"))
@@ -95,10 +97,13 @@ def main(
             "embedding_dimension": embedding_dimension,
         },
     )
+    print(f"Vector store created: {vector_store.id}")
 
     file_buffer = BytesIO(text.encode("utf-8"))
     file_buffer.name = "vector-db-basics.txt"
     uploaded_file = client.files.create(file=file_buffer, purpose="assistants")
+    print(f"File uploaded: {uploaded_file.id}")
+
     client.vector_stores.files.create(
         vector_store_id=vector_store.id,
         file_id=uploaded_file.id,
@@ -108,6 +113,7 @@ def main(
             "static": {"max_chunk_size_tokens": 256, "chunk_overlap_tokens": 32},
         },
     )
+    print(f"File attached to vector store: {vector_store.id}")
 
     search_response = client.vector_stores.search(
         vector_store_id=vector_store.id,
