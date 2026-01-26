@@ -7,105 +7,19 @@
 import tempfile
 import time
 from pathlib import Path
-from urllib.request import urlopen
 
 import fire
 from llama_stack_client import LlamaStackClient
 from termcolor import colored
 
-from .utils import check_model_is_available, get_any_available_model
-
-
-def _get_model_type(model) -> str | None:
-    for attr in ("model_type", "type", "model_kind", "kind", "model_family"):
-        value = getattr(model, attr, None)
-        if isinstance(value, str):
-            return value
-    for metadata_attr in ("custom_metadata", "metadata"):
-        metadata = getattr(model, metadata_attr, None)
-        if isinstance(metadata, dict):
-            value = metadata.get("model_type") or metadata.get("type")
-            if isinstance(value, str):
-                return value
-    return None
-
-
-def _get_model_id(model) -> str | None:
-    for attr in ("identifier", "model_id", "id", "name"):
-        value = getattr(model, attr, None)
-        if isinstance(value, str):
-            return value
-    return None
-
-
-def _get_any_available_embedding_model(client: LlamaStackClient) -> str | None:
-    embedding_models = [
-        model_id
-        for model in client.models.list()
-        for model_id in [_get_model_id(model)]
-        if model_id
-        and (
-            _get_model_type(model) == "embedding"
-            or "embedding" in model_id.lower()
-            or "embed" in model_id.lower()
-        )
-    ]
-    if not embedding_models:
-        print(colored("No available embedding models.", "red"))
-        return None
-    return embedding_models[0]
-
-
-def _get_embedding_dimension(client: LlamaStackClient, model_id: str) -> int | None:
-    try:
-        response = client.embeddings.create(model=model_id, input="dimension probe")
-    except Exception:
-        return None
-    if not response.data:
-        return None
-    embedding = response.data[0].embedding
-    if isinstance(embedding, list):
-        return len(embedding)
-    return None
-
-
-def _download_documents(urls: list[str], target_dir: Path) -> list[Path]:
-    local_paths: list[Path] = []
-    for url in urls:
-        filename = url.rsplit("/", 1)[-1]
-        target_path = target_dir / filename
-        try:
-            with urlopen(url) as response:
-                content_bytes = response.read()
-        except Exception as exc:
-            print(colored(f"Failed to download {url}: {exc}", "red"))
-            continue
-        try:
-            content_text = content_bytes.decode("utf-8", errors="ignore").strip()
-        except Exception as exc:
-            print(colored(f"Failed to decode {url}: {exc}", "red"))
-            continue
-        if not content_text:
-            print(colored(f"Downloaded empty content from {url}", "red"))
-            continue
-        target_path = target_path.with_suffix(".txt")
-        target_path.write_text(content_text, encoding="utf-8")
-        local_paths.append(target_path)
-    return local_paths
-
-
-def _build_context(search_results) -> str:
-    if not search_results:
-        return ""
-    context_lines = ["Context from uploaded documents:"]
-    for result in search_results:
-        snippet = " ".join(
-            content.text.strip() for content in result.content if getattr(content, "text", None)
-        ).strip()
-        if not snippet:
-            continue
-        context_lines.append(f"- {result.filename} (score={result.score:.2f}): {snippet}")
-    return "\n".join(context_lines)
+from .utils import (
+    build_context,
+    download_documents,
+    check_model_is_available,
+    get_any_available_chat_model,
+    get_any_available_embedding_model,
+    get_embedding_dimension,
+)
 
 
 def main(
@@ -127,7 +41,7 @@ def main(
     )
 
     if model_id is None:
-        model_id = get_any_available_model(client)
+        model_id = get_any_available_chat_model(client)
         if model_id is None:
             return
     else:
@@ -136,11 +50,11 @@ def main(
 
     print(f"Using model: {model_id}")
 
-    embedding_model = embedding_model_id or _get_any_available_embedding_model(client)
+    embedding_model = embedding_model_id or get_any_available_embedding_model(client)
     if embedding_model is None:
         return
 
-    embedding_dimension = _get_embedding_dimension(client, embedding_model)
+    embedding_dimension = get_embedding_dimension(client, embedding_model)
     if embedding_dimension is None:
         print(colored("Unable to determine embedding dimension.", "red"))
         return
@@ -154,7 +68,7 @@ def main(
     attached_file_ids: list[str] = []
     try:
         with tempfile.TemporaryDirectory() as tmpdir:
-            doc_paths = _download_documents(urls, Path(tmpdir))
+            doc_paths = download_documents(urls, Path(tmpdir))
             if not doc_paths:
                 print(colored("No documents downloaded. Exiting.", "red"))
                 return
@@ -223,7 +137,7 @@ def main(
                 query=prompt,
                 max_num_results=5,
             )
-            context = _build_context(search_response.data)
+            context = build_context(search_response.data)
             instructions = "You are a helpful assistant."
             if context:
                 instructions = f"{instructions}\n\n{context}"
