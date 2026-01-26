@@ -67,7 +67,7 @@ def get_any_available_model(client: LlamaStackClient):
     return available_models[0]
 
 
-def _can_model_chat(client: LlamaStackClient, model_id: str) -> bool:
+def can_model_chat(client: LlamaStackClient, model_id: str) -> bool:
     # Lightweight probe to ensure the model supports chat completions.
     try:
         client.chat.completions.create(
@@ -78,7 +78,6 @@ def _can_model_chat(client: LlamaStackClient, model_id: str) -> bool:
     except Exception:
         return False
     return True
-
 
 def get_any_available_chat_model(client: LlamaStackClient):
     available_models = [
@@ -92,7 +91,7 @@ def get_any_available_chat_model(client: LlamaStackClient):
         return None
 
     for model_id in available_models:
-        if _can_model_chat(client, model_id):
+        if can_model_chat(client, model_id):
             return model_id
 
     print(colored("No available chat-capable models.", "red"))
