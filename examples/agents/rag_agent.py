@@ -14,60 +14,13 @@ import time
 from llama_stack_client import Agent, AgentEventLogger, LlamaStackClient
 from termcolor import colored
 
-from .utils import check_model_is_available, get_any_available_model
-
-
-def _get_model_type(model) -> str | None:
-    for attr in ("model_type", "type", "model_kind", "kind", "model_family"):
-        value = getattr(model, attr, None)
-        if isinstance(value, str):
-            return value
-    for metadata_attr in ("custom_metadata", "metadata"):
-        metadata = getattr(model, metadata_attr, None)
-        if isinstance(metadata, dict):
-            value = metadata.get("model_type") or metadata.get("type")
-            if isinstance(value, str):
-                return value
-    return None
-
-
-def _get_model_id(model) -> str | None:
-    for attr in ("identifier", "model_id", "id", "name"):
-        value = getattr(model, attr, None)
-        if isinstance(value, str):
-            return value
-    return None
-
-
-def _get_any_available_embedding_model(client: LlamaStackClient) -> str | None:
-    embedding_models = [
-        model_id
-        for model in client.models.list()
-        for model_id in [_get_model_id(model)]
-        if model_id
-        and (
-            _get_model_type(model) == "embedding"
-            or "embedding" in model_id.lower()
-            or "embed" in model_id.lower()
-        )
-    ]
-    if not embedding_models:
-        print(colored("No available embedding models.", "red"))
-        return None
-    return embedding_models[0]
-
-
-def _get_embedding_dimension(client: LlamaStackClient, model_id: str) -> int | None:
-    try:
-        response = client.embeddings.create(model=model_id, input="dimension probe")
-    except Exception:
-        return None
-    if not response.data:
-        return None
-    embedding = response.data[0].embedding
-    if isinstance(embedding, list):
-        return len(embedding)
-    return None
+from .utils import (
+    can_model_chat,
+    check_model_is_available,
+    get_any_available_chat_model,
+    get_any_available_embedding_model,
+    get_embedding_dimension,
+)
 
 
 def main(
@@ -91,20 +44,28 @@ def main(
     client = LlamaStackClient(base_url=f"http://{host}:{port}")
 
     if model_id is None:
-        model_id = get_any_available_model(client)
+        model_id = get_any_available_chat_model(client)
         if model_id is None:
             return
     else:
         if not check_model_is_available(client, model_id):
             return
+        if not can_model_chat(client, model_id):
+            print(
+                colored(
+                    f"Model `{model_id}` does not support chat. Choose a chat-capable model.",
+                    "red",
+                )
+            )
+            return
 
     print(f"Using model: {model_id}")
 
-    embedding_model = embedding_model_id or _get_any_available_embedding_model(client)
+    embedding_model = embedding_model_id or get_any_available_embedding_model(client)
     if embedding_model is None:
         return
 
-    embedding_dimension = _get_embedding_dimension(client, embedding_model)
+    embedding_dimension = get_embedding_dimension(client, embedding_model)
     if embedding_dimension is None:
         print(colored("Unable to determine embedding dimension.", "red"))
         return

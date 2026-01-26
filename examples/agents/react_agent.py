@@ -12,7 +12,7 @@ from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.lib.agents.react.agent import ReActAgent
 from termcolor import colored
 
-from .utils import check_model_is_available, get_any_available_model
+from .utils import can_model_chat, check_model_is_available, get_any_available_chat_model
 
 
 def torchtune(query: str = "torchtune"):
@@ -43,11 +43,19 @@ def main(host: str, port: int, model_id: str | None = None):
     )
 
     if model_id is None:
-        model_id = get_any_available_model(client)
+        model_id = get_any_available_chat_model(client)
         if model_id is None:
             return
     else:
         if not check_model_is_available(client, model_id):
+            return
+        if not can_model_chat(client, model_id):
+            print(
+                colored(
+                    f"Model `{model_id}` does not support chat. Choose a chat-capable model.",
+                    "red",
+                )
+            )
             return
 
     print(colored(f"Using model: {model_id}", "green"))
