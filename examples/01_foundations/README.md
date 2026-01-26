@@ -40,3 +40,17 @@ python -m examples.01_foundations.04_vector_db_basics localhost 8321
 # Provide custom text and query
 python -m examples.01_foundations.04_vector_db_basics localhost 8321 --text "Llama Stack unifies AI services." --query "What does Llama Stack do?"
 ```
+
+### Insert Documents (`05_insert_documents.py`)
+
+Create (or reuse) a vector store and insert documents from URLs or a local directory.
+
+```bash
+python -m examples.01_foundations.05_insert_documents localhost 8321
+
+# Insert files from a local directory
+python -m examples.01_foundations.05_insert_documents localhost 8321 --file_dir ./docs
+
+# Insert into an existing vector store
+python -m examples.01_foundations.05_insert_documents localhost 8321 --vector_store_id <vector-store-id>
+```
