@@ -43,12 +43,14 @@ def serve() -> None:
 
 
 def _get_toolgroup_provider(client: LlamaStackClient, provider_id: str | None):
-    providers = [p for p in client.providers.list() if p.api in ("toolgroups", "toolgroup", "tools")]
+    providers = [p for p in client.providers.list() if p.api in ("tool_runtime")]
     if not providers:
         print(colored("No toolgroup providers found. Skipping registration.", "yellow"))
         return None
     if provider_id is None:
-        return providers[0]
+        for provider in providers:
+            if provider.provider_id == "model-context-protocol":
+                return provider
     for provider in providers:
         if provider.provider_id == provider_id:
             return provider
@@ -106,6 +108,10 @@ def run(
         kwargs={"a": a, "b": b},
     )
     print(f"{tool_name}({a}, {b}) -> {result}")
+
+    # Unregister the MCP toolgroup from the Llama Stack server.
+    client.toolgroups.unregister(toolgroup_id=toolgroup_id)
+    print(f"Unregistered toolgroup '{toolgroup_id}'")
 
 
 if __name__ == "__main__":

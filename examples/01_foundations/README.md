@@ -80,7 +80,7 @@ Start a local MCP server and register its tools with Llama Stack.
 # Terminal 1: start the MCP server (requires: pip install mcp)
 python -m examples.01_foundations.08_mcp_tools serve
 
-# Terminal 2: register the MCP toolgroup with Llama Stack
+# Terminal 2: register the MCP toolgroup with Llama Stack (Optional)
 llama-stack-client toolgroups register plus-tools \
   --provider-id model-context-protocol \
   --mcp-endpoint "http://localhost:8000/sse"
