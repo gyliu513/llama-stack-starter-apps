@@ -31,3 +31,11 @@ Stream agent tool calls and outputs.
 ```bash
 python -m examples.02_responses_basics.04_streaming_responses localhost 8321
 ```
+
+### Response Formats (`05_response_formats.py`)
+
+Structured outputs with JSON mode and JSON schema.
+
+```bash
+python -m examples.02_responses_basics.05_response_formats localhost 8321
+```
