@@ -54,3 +54,11 @@ python -m examples.01_foundations.05_insert_documents localhost 8321 --file_dir 
 # Insert into an existing vector store
 python -m examples.01_foundations.05_insert_documents localhost 8321 --vector_store_id <vector-store-id>
 ```
+
+### Search Vectors (`06_search_vectors.py`)
+
+Insert documents into a vector store and run a vector search.
+
+```bash
+python -m examples.01_foundations.06_search_vectors localhost 8321 --query "What does Llama Stack do?"
+```
