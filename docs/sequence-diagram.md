@@ -1,8 +1,6 @@
 The sequence diagram with more details of the communication between components is below:
 
 ```mermaid
-
-
 sequenceDiagram
     participant U as User
     participant S as Shields

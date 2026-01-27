@@ -1,5 +1,5 @@
 """
-Insert documents into a vector store.
+Insert documents into a vector store and search it.
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -43,6 +43,21 @@ DEFAULT_URLS = [
 def _maybe_load_dotenv() -> None:
     if load_dotenv is not None:
         load_dotenv()
+
+
+def _print_results(search_response) -> None:
+    if not search_response.data:
+        print("No results found.")
+        return
+    for idx, result in enumerate(search_response.data, start=1):
+        snippet = ""
+        if result.content:
+            snippet = " ".join(
+                content.text.strip() for content in result.content if getattr(content, "text", None)
+            ).strip()
+        print(f"{idx}. score={result.score:.4f} file={result.filename}")
+        if snippet:
+            print(f"   {snippet}")
 
 
 def _get_vector_provider(client: LlamaStackClient, provider_id: str | None):
@@ -123,6 +138,8 @@ def main(
     provider_id: str | None = None,
     file_dir: str | None = None,
     urls: str | None = None,
+    query: str = "What is the meaning of life?",
+    max_num_results: int = 3,
 ) -> None:
     _maybe_load_dotenv()
 
@@ -156,7 +173,13 @@ def main(
     file_paths: list[Path] = []
     if file_dir:
         file_paths = _collect_local_files(file_dir)
-    if not file_paths:
+    if file_paths:
+        for file_path in file_paths:
+            with open(file_path, "rb") as doc_file:
+                file_response = client.files.create(file=doc_file, purpose="assistants")
+            if _attach_file(client, vector_store_id, file_response.id, file_path.name):
+                print(f"Attached: {file_path.name} -> {file_response.id}")
+    else:
         url_list = [u.strip() for u in (urls.split(",") if urls else DEFAULT_URLS) if u.strip()]
         with tempfile.TemporaryDirectory() as tmpdir:
             file_paths = download_documents(url_list, Path(tmpdir))
@@ -168,16 +191,16 @@ def main(
                     file_response = client.files.create(file=doc_file, purpose="assistants")
                 if _attach_file(client, vector_store_id, file_response.id, file_path.name):
                     print(f"Attached: {file_path.name} -> {file_response.id}")
-            print(f"Done. Vector store ready: {vector_store_id}")
-            return
-
-    for file_path in file_paths:
-        with open(file_path, "rb") as doc_file:
-            file_response = client.files.create(file=doc_file, purpose="assistants")
-        if _attach_file(client, vector_store_id, file_response.id, file_path.name):
-            print(f"Attached: {file_path.name} -> {file_response.id}")
-
     print(f"Done. Vector store ready: {vector_store_id}")
+
+    # Vector search returns the most similar text chunks from the vector store.
+    # It does NOT generate an answer; it retrieves raw chunks + scores for the query embedding.
+    search_response = client.vector_stores.search(
+        vector_store_id=vector_store_id,
+        query=query,
+        max_num_results=max_num_results,
+    )
+    _print_results(search_response)
 
 
 if __name__ == "__main__":
