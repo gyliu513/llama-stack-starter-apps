@@ -10,10 +10,10 @@ python -m examples.02_responses_basics.01_simple_response localhost 8321 --promp
 
 ### Tool Calling (`02_tool_calling.py`)
 
-Call a simple function tool using the Responses API.
+Tool calling via an agent (calculator, ticker data, web search).
 
 ```bash
-python -m examples.02_responses_basics.02_tool_calling localhost 8321 --prompt "Add 7 and 35."
+python -m examples.02_responses_basics.02_tool_calling localhost 8321 --prompt "Search the web for who was the 42nd president of the United States and answer with the name only."
 ```
 
 ### Conversation Turns (`03_conversation_turns.py`)
@@ -22,4 +22,12 @@ Multi-turn conversation using a shared conversation id.
 
 ```bash
 python -m examples.02_responses_basics.03_conversation_turns localhost 8321
+```
+
+### Streaming Responses (`04_streaming_responses.py`)
+
+Stream agent tool calls and outputs.
+
+```bash
+python -m examples.02_responses_basics.04_streaming_responses localhost 8321
 ```
