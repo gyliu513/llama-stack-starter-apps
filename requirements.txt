@@ -4,3 +4,4 @@ setuptools
 yfinance>=0.2.54
 gradio
 llama-stack-client>=0.1.0
+mcp

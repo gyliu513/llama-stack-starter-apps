@@ -62,7 +62,7 @@ Insert documents into a vector store and run a vector search.
 ```bash
 python -m examples.01_foundations.06_search_vectors localhost 8321 --query "What does Llama Stack do?"
 ```
-
+ 
 ### Tool Registration (`07_tool_registration.py`)
 
 Register custom tools (calculator, ticker data, web search) for an agent.
@@ -70,4 +70,21 @@ Register custom tools (calculator, ticker data, web search) for an agent.
 ```bash
 export TAVILY_SEARCH_API_KEY=...
 python -m examples.01_foundations.07_tool_registration localhost 8321
+```
+
+### MCP Tools (`08_mcp_tools.py`)
+
+Start a local MCP server and register its tools with Llama Stack.
+
+```bash
+# Terminal 1: start the MCP server (requires: pip install mcp)
+python -m examples.01_foundations.08_mcp_tools serve
+
+# Terminal 2: register the MCP toolgroup with Llama Stack
+llama-stack-client toolgroups register plus-tools \
+  --provider-id model-context-protocol \
+  --mcp-endpoint "http://localhost:8000/sse"
+
+# Terminal 2: invoke the add tool through the runtime
+python -m examples.01_foundations.08_mcp_tools run localhost 8321 --mcp_endpoint http://localhost:8000/sse --tool_name add --a 1 --b 1
 ```
