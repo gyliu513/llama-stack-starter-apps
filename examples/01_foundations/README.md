@@ -62,3 +62,12 @@ Insert documents into a vector store and run a vector search.
 ```bash
 python -m examples.01_foundations.06_search_vectors localhost 8321 --query "What does Llama Stack do?"
 ```
+
+### Tool Registration (`07_tool_registration.py`)
+
+Register custom tools (calculator, ticker data, web search) for an agent.
+
+```bash
+export TAVILY_SEARCH_API_KEY=...
+python -m examples.01_foundations.07_tool_registration localhost 8321
+```
