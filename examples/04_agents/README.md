@@ -33,51 +33,59 @@ pip install -r requirements.txt
 
 ## Available Examples
 
-### Simple Chat Bot (`simple_chat.py`)
+### Simple Chat Bot (`01_simple_agent_chat.py`)
 
 A basic chatbot with web search capabilities. Shows how to create a simple agent with built-in tools.
 
 ```bash
-python -m examples.agents.simple_chat --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.01_simple_agent_chat --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
-### Multimodal Chat (`chat_multimodal.py`)
+
+### Task Delegation (`02_task_delegation.py`)
+
+Routes prompts to specialized agents (general, research, math, finance).
+
+```bash
+python -m examples.04_agents.02_task_delegation --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+```
+### Multimodal Chat (`03_chat_multimodal.py`)
 
 Demonstrates how to create an agent with multimodal capabilities
 
 ```bash
-python -m examples.agents.chat_multimodal --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.03_chat_multimodal --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Chat with Documents (`chat_with_documents.py`)
+### Chat with Documents (`04_chat_with_documents.py`)
 
 Demonstrates how to create an agent that can reference and retrieve information from attached documents.
 
 ```bash
-python -m examples.agents.chat_with_documents --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.04_chat_with_documents --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Custom Tools Integration (`agent_with_tools.py`)
+### Custom Tools Integration (`05_agent_with_tools.py`)
 
 Shows how to integrate custom tools with your agent, such as a calculator, stock ticker data, and custom search capabilities.
 
 ```bash
-python -m examples.agents.agent_with_tools --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.05_agent_with_tools --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### RAG Agent (`rag_agent.py`)
+### RAG Agent (`06_rag_agent.py`)
 
 Demonstrates Retrieval-Augmented Generation (RAG) using vector databases for efficient information retrieval from document collections.
 
 ```bash
-python -m examples.agents.rag_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.06_rag_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### ReACT Agent (`react_agent.py`)
+### ReACT Agent (`07_react_agent.py`)
 
 Implements a ReACT (Reasoning and Acting) agent that can perform multi-step reasoning and take actions based on those reasoning steps.
 
 ```bash
-python -m examples.agents.react_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.07_react_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
 ## Usage Tips
@@ -85,7 +93,7 @@ python -m examples.agents.react_agent --host localhost --port 8321 --model_id me
 - All scripts accept `--host` and `--port` parameters to specify the Llama Stack server connection.
 - You can specify a particular model using the `--model_id` parameter (as shown in the examples above).
 - If no model is specified, the scripts will automatically select an available model.
-- Look at `simple_chat` for an example of how to automatically pick an available safety shield for the agent 
+- Look at `01_simple_agent_chat` for an example of how to automatically pick an available safety shield for the agent
 
 For more information on the Llama Stack framework, refer to the [official documentation](https://github.com/meta-llama/llama-stack).
 
