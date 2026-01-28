@@ -41,51 +41,52 @@ A basic chatbot with web search capabilities. Shows how to create a simple agent
 python -m examples.04_agents.01_simple_agent_chat --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Task Delegation (`02_task_delegation.py`)
-
-Routes prompts to specialized agents (general, research, math, finance).
-
-```bash
-python -m examples.04_agents.02_task_delegation --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
-```
-### Multimodal Chat (`03_chat_multimodal.py`)
+### Multimodal Chat (`02_chat_multimodal.py`)
 
 Demonstrates how to create an agent with multimodal capabilities
 
 ```bash
-python -m examples.04_agents.03_chat_multimodal --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.02_chat_multimodal --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Chat with Documents (`04_chat_with_documents.py`)
+### Chat with Documents (`03_chat_with_documents.py`)
 
 Demonstrates how to create an agent that can reference and retrieve information from attached documents.
 
 ```bash
-python -m examples.04_agents.04_chat_with_documents --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.03_chat_with_documents --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Custom Tools Integration (`05_agent_with_tools.py`)
+### Custom Tools Integration (`04_agent_with_tools.py`)
 
 Shows how to integrate custom tools with your agent, such as a calculator, stock ticker data, and custom search capabilities.
 
 ```bash
-python -m examples.04_agents.05_agent_with_tools --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.04_agent_with_tools --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### RAG Agent (`06_rag_agent.py`)
+### RAG Agent (`05_rag_agent.py`)
 
 Demonstrates Retrieval-Augmented Generation (RAG) using vector databases for efficient information retrieval from document collections.
 
 ```bash
-python -m examples.04_agents.06_rag_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.05_rag_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### ReACT Agent (`07_react_agent.py`)
+### ReACT Agent (`06_react_agent.py`)
 
 Implements a ReACT (Reasoning and Acting) agent that can perform multi-step reasoning and take actions based on those reasoning steps.
 
 ```bash
-python -m examples.04_agents.07_react_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+python -m examples.04_agents.06_react_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
+```
+
+### Agent Routing (`07_agent_routing.py`)
+
+Coordinates multiple specialized agents and synthesizes their outputs.
+
+```bash
+python -m examples.04_agents.07_agent_routing --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
 ## Usage Tips

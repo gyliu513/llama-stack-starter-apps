@@ -12,7 +12,7 @@ from termcolor import colored
 from examples.client_tools.calculator import calculator
 from examples.client_tools.ticker_data import get_ticker_data
 from examples.client_tools.web_search import WebSearchTool
-from llama_stack_client import Agent, AgentEventLogger, LlamaStackClient
+from llama_stack_client import Agent, LlamaStackClient
 
 from .utils import can_model_chat, check_model_is_available, get_any_available_chat_model
 
@@ -36,15 +36,27 @@ def _resolve_web_tool():
     return WebSearchTool(engine, api_key)
 
 
-def _route_prompt(prompt: str, web_available: bool) -> str:
+def _route_subtask(prompt: str, web_available: bool) -> str:
     lower_prompt = prompt.lower()
+    if any(token in lower_prompt for token in ["update", "recent", "release", "news", "search", "find"]):
+        return "research" if web_available else "general"
     if any(token in lower_prompt for token in ["stock", "ticker", "price", "market"]):
         return "finance"
-    if any(token in lower_prompt for token in ["calculate", "sum", "+", "-", "*", "/"]):
+    if any(token in lower_prompt for token in ["calculate", "sum", "math"]):
         return "math"
-    if any(token in lower_prompt for token in ["search", "latest", "who", "when", "news", "find"]):
+    if any(char.isdigit() for char in lower_prompt) and any(
+        token in lower_prompt for token in ["+", "-", "*", "/"]
+    ):
+        return "math"
+    if any(token in lower_prompt for token in ["latest", "who", "when"]):
         return "research" if web_available else "general"
     return "general"
+
+
+def _extract_output(response) -> str:
+    if isinstance(response, tuple):
+        response = response[0]
+    return response.output_text or str(response.output)
 
 
 def main(host: str, port: int, model_id: str | None = None):
@@ -94,27 +106,49 @@ def main(host: str, port: int, model_id: str | None = None):
             tools=[get_ticker_data],
         ),
     }
+    sessions = {name: agent.create_session(f"coordination-{name}") for name, agent in agents.items()}
 
-    sessions = {name: agent.create_session(f"task-delegation-{name}") for name, agent in agents.items()}
-
-    user_prompts = [
-        "Summarize what Llama Stack provides in one sentence.",
-        "What is the closing price of GOOG for 2023?",
-        "Calculate (45 * 18) / 6.",
-        "Search for the latest Llama Stack release notes and summarize them.",
+    task = (
+        "Prepare a brief update for a product manager: "
+        "1) Find a recent Llama Stack update. "
+        "2) Compute 45 * 12 / 6. "
+        "3) Get the closing price of GOOG for 2023."
+    )
+    subtasks = [
+        "Find a recent Llama Stack update and summarize it in one sentence.",
+        "Compute 45 * 12 / 6.",
+        "What was the closing price of GOOG for 2023?",
     ]
 
-    for prompt in user_prompts:
-        route = _route_prompt(prompt, web_available)
+    print(colored(f"[task] {task}", "cyan"))
+    subtask_results: list[str] = []
+    for subtask in subtasks:
+        route = _route_subtask(subtask, web_available)
         agent = agents[route]
         session_id = sessions[route]
-        print(colored(f"[router] {prompt} -> {route}", "cyan"))
+        print(colored(f"[coordination] {subtask} -> {route}", "blue"))
         response = agent.create_turn(
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": subtask}],
             session_id=session_id,
+            stream=False,
         )
-        for printable in AgentEventLogger().log(response):
-            print(printable, end="", flush=True)
+        text_output = _extract_output(response)
+        subtask_results.append(f"- {subtask}\n  Result: {text_output}")
+        print(text_output)
+
+    synthesis = (
+        "Synthesize the following subtask results into a concise update:\n\n"
+        + "\n\n".join(subtask_results)
+    )
+    coordinator = agents["general"]
+    coordinator_session = sessions["general"]
+    print(colored("[coordination] synthesizing final response", "green"))
+    final_response = coordinator.create_turn(
+        messages=[{"role": "user", "content": synthesis}],
+        session_id=coordinator_session,
+        stream=False,
+    )
+    print(_extract_output(final_response))
 
 
 if __name__ == "__main__":
