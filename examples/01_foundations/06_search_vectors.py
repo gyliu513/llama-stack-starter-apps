@@ -1,5 +1,14 @@
 """
-Insert documents into a vector store and search it.
+Demo: Search Vectors
+
+Description:
+This demo teaches how to build a complete end-to-end workflow for inserting documents and performing semantic search.
+
+Learning Objectives:
+- Create a complete document ingestion and search pipeline
+- Perform vector search with custom queries and result limits
+- Format and display search results with scores and snippets
+- Understand the difference between vector search and answer generation
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

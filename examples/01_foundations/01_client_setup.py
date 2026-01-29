@@ -1,5 +1,13 @@
 """
-Basic llama stack client setup.
+Demo: Client Setup
+
+Description:
+This demo teaches the fundamentals of setting up and connecting to a Llama Stack server using the LlamaStackClient.
+
+Learning Objectives:
+- Initialize a LlamaStackClient with a specific host and port
+- Perform a health check to verify server connectivity
+- Handle connection failures gracefully
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

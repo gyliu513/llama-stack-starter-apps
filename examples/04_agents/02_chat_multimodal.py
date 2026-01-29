@@ -3,6 +3,20 @@
 #
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
+
+"""
+Demo: Multimodal Chat
+
+Description:
+This demo teaches how to build agents that can process and understand images alongside text in conversations.
+
+Learning Objectives:
+- Create agents with vision-capable models
+- Encode images as data URLs for multimodal input
+- Combine image and text inputs in agent messages
+- Build context-aware conversations referencing multiple images
+"""
+
 import base64
 import mimetypes
 from pathlib import Path

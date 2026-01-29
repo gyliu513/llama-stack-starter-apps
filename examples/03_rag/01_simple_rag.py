@@ -1,5 +1,14 @@
 """
-Basic RAG with file_search tool.
+Demo: Simple RAG
+
+Description:
+This demo teaches how to build a basic Retrieval-Augmented Generation (RAG) system using the file_search tool.
+
+Learning Objectives:
+- Create a vector store and upload documents for RAG
+- Use the file_search tool to retrieve relevant context
+- Generate responses grounded in retrieved documents
+- Understand the RAG workflow: embed, store, retrieve, generate
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

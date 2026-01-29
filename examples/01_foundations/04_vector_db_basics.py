@@ -1,5 +1,14 @@
 """
-Register and use a vector DB with a simple search.
+Demo: Vector Database Basics
+
+Description:
+This demo teaches the fundamentals of creating vector stores, uploading documents, and performing semantic search.
+
+Learning Objectives:
+- Create and configure a vector store with embeddings
+- Upload text files to a vector store
+- Perform semantic search with natural language queries
+- Understand embedding models and vector providers
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

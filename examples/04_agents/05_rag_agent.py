@@ -4,6 +4,19 @@
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
 
+"""
+Demo: RAG Agent
+
+Description:
+This demo teaches how to build agents that use the file_search tool for retrieval-augmented generation (RAG).
+
+Learning Objectives:
+- Create agents with file_search tool capabilities
+- Upload and index documents for agent-driven retrieval
+- Enable agents to automatically search documents for answers
+- Build knowledge-grounded conversational agents
+"""
+
 from io import BytesIO
 from urllib.parse import urlparse
 from urllib.request import urlopen

@@ -1,5 +1,14 @@
 """
-Basic inference with chat completions.
+Demo: Chat Completion
+
+Description:
+This demo teaches how to perform basic chat completions with Llama Stack, including both streaming and non-streaming responses.
+
+Learning Objectives:
+- Create chat completion requests with user messages
+- Select and verify available chat models
+- Use streaming responses for real-time output
+- Handle model availability and capability checks
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

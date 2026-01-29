@@ -3,6 +3,20 @@
 #
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
+
+"""
+Demo: Simple Agent Chat
+
+Description:
+This demo teaches how to create a basic conversational agent with web search capabilities and safety shields.
+
+Learning Objectives:
+- Create and configure an Agent with the Agent API
+- Set up agent sessions for stateful conversations
+- Enable web search tools for real-time information retrieval
+- Configure safety shields for input and output filtering
+"""
+
 import os
 
 import inspect

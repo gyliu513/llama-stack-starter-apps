@@ -1,5 +1,14 @@
 """
-Tool calling with the Responses API.
+Demo: Tool Calling
+
+Description:
+This demo teaches how to use built-in tools like web search with the Responses API to enhance model capabilities.
+
+Learning Objectives:
+- Enable tool calling in the Responses API
+- Use the web_search tool for retrieving real-time information
+- Control tool choice to ensure specific tools are used
+- Include tool execution metadata in responses
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

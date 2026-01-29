@@ -1,5 +1,14 @@
 """
-Streaming responses for multi-turn conversation.
+Demo: Streaming Responses
+
+Description:
+This demo teaches how to use streaming responses for real-time text generation in multi-turn conversations.
+
+Learning Objectives:
+- Enable streaming mode in the Responses API
+- Process response events and deltas in real-time
+- Handle different event types during streaming
+- Provide real-time feedback to users during text generation
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

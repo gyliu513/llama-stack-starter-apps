@@ -1,5 +1,14 @@
 """
-Multi-turn conversation using the Responses API.
+Demo: Conversation Turns
+
+Description:
+This demo teaches how to manage multi-turn conversations using the Responses API with conversation context.
+
+Learning Objectives:
+- Create and manage conversation sessions
+- Maintain conversation context across multiple turns
+- Use conversation IDs to track dialogue history
+- Build coherent multi-turn interactions with the model
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

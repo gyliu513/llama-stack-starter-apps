@@ -1,5 +1,14 @@
 """
-Basic inference with chat completions.
+Demo: System Prompts
+
+Description:
+This demo teaches how to use system prompts to control the behavior and persona of the AI assistant.
+
+Learning Objectives:
+- Add system messages to chat completions
+- Control assistant behavior through system prompts
+- Understand the role of system messages in conversation context
+- Combine system prompts with user messages
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

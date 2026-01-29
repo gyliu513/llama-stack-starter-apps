@@ -1,5 +1,14 @@
 """
-Compare different chunking strategies for file_search.
+Demo: Chunking Strategies
+
+Description:
+This demo teaches how different chunking strategies affect retrieval quality and response generation in RAG systems.
+
+Learning Objectives:
+- Configure static chunking strategies with different parameters
+- Compare small vs. large chunk sizes for retrieval
+- Understand the impact of chunk overlap on retrieval quality
+- Choose appropriate chunking strategies for different use cases
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

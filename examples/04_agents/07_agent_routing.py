@@ -4,6 +4,20 @@
 #
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
+
+"""
+Demo: Agent Routing
+
+Description:
+This demo teaches how to coordinate multiple specialized agents to handle complex multi-step tasks through routing.
+
+Learning Objectives:
+- Create multiple specialized agents for different domains
+- Implement task routing logic to select appropriate agents
+- Coordinate agents to solve multi-faceted problems
+- Synthesize results from multiple agent executions
+"""
+
 import os
 
 import fire
