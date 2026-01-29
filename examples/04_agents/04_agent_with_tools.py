@@ -13,7 +13,7 @@ from examples.client_tools.calculator import calculator
 
 from llama_stack_client import LlamaStackClient, Agent, AgentEventLogger
 
-from .utils import can_model_chat, check_model_is_available, get_any_available_chat_model
+from examples.shared.utils import can_model_chat, check_model_is_available, get_any_available_chat_model
 
 
 def main(host: str, port: int, model_id: str | None = None):

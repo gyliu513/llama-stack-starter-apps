@@ -79,6 +79,7 @@ def can_model_chat(client: LlamaStackClient, model_id: str) -> bool:
         return False
     return True
 
+
 def get_any_available_chat_model(client: LlamaStackClient):
     available_models = [
         model_id

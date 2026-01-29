@@ -18,7 +18,7 @@ import fire
 from llama_stack_client import LlamaStackClient
 from termcolor import colored
 
-from examples.agents.utils import (  # noqa: E402
+from examples.shared.utils import (  # noqa: E402
     get_any_available_embedding_model,
     get_embedding_dimension,
 )

@@ -11,7 +11,7 @@ import fire
 from llama_stack_client import Agent, LlamaStackClient
 from termcolor import colored
 
-from .utils import check_model_is_available
+from examples.shared.utils import check_model_is_available
 
 THIS_DIR = Path(__file__).parent
 

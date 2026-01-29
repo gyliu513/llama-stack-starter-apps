@@ -14,7 +14,7 @@ import time
 from llama_stack_client import Agent, AgentEventLogger, LlamaStackClient
 from termcolor import colored
 
-from .utils import (
+from examples.shared.utils import (
     can_model_chat,
     check_model_is_available,
     get_any_available_chat_model,

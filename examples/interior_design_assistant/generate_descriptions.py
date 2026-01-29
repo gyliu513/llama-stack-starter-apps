@@ -19,7 +19,7 @@ from examples.interior_design_assistant.utils import (
 )
 
 from llama_stack_client import LlamaStackClient
-from examples.agents.utils import check_model_is_available
+from examples.shared.utils import check_model_is_available
 
 
 MODEL = "Llama3.2-11B-Vision-Instruct"
