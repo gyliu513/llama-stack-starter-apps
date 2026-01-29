@@ -1,29 +1,5 @@
 # RAG (Retrieval-Augmented Generation)
 
-## Setup Instructions
-
-1. Set API keys for external services:
-   ```bash
-   # For web search capabilities
-   # Get Tavily API keys from https://docs.tavily.com/documentation/quickstart
-   export TAVILY_SEARCH_API_KEY=your_key_here
-   ```
-
-2. Start the Llama Stack server locally:
-   ```bash
-   yes | conda create -n agents python=3.10
-   conda activate agents
-   pip install -U llama_stack
-
-   # Start the server on localhost:8321
-   llama stack run starter
-   ```
-
-3. Install required Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
 ## Overview
 This folder teaches Retrieval-Augmented Generation (RAG) techniques using Llama Stack's vector stores and search capabilities. These examples show how to ground model responses in retrieved documents, combine multiple data sources, and optimize retrieval strategies.
 

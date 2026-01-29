@@ -1,29 +1,5 @@
 # Responses Basics
 
-## Setup Instructions
-
-1. Set API keys for external services:
-   ```bash
-   # For web search capabilities
-   # Get Tavily API keys from https://docs.tavily.com/documentation/quickstart
-   export TAVILY_SEARCH_API_KEY=your_key_here
-   ```
-
-2. Start the Llama Stack server locally:
-   ```bash
-   yes | conda create -n agents python=3.10
-   conda activate agents
-   pip install -U llama_stack
-
-   # Start the server on localhost:8321
-   llama stack run starter
-   ```
-
-3. Install required Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
 ## Overview
 This folder teaches the fundamentals of the Responses API, which provides a higher-level abstraction for generating text responses with instructions, tools, and structured outputs. These examples demonstrate different response patterns and capabilities.
 
