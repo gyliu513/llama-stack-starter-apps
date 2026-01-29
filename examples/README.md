@@ -15,7 +15,7 @@ This folder contains a comprehensive collection of examples demonstrating how to
 
 2. Start the Llama Stack server locally:
    ```bash
-   conda create -n stack python=3.10
+   conda create -n stack python=3.12
    conda activate stack
    pip install -U llama_stack
 
