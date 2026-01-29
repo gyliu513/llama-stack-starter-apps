@@ -1,51 +1,112 @@
-## Available Examples
+# Foundations
 
-### Client Setup (`01_client_setup.py`)
+## Setup Instructions
 
-Validate your client connection by performing a health check.
+1. Set API keys for external services:
+   ```bash
+   # For web search capabilities
+   # Get Tavily API keys from https://docs.tavily.com/documentation/quickstart
+   export TAVILY_SEARCH_API_KEY=your_key_here
+   ```
 
+2. Start the Llama Stack server locally:
+   ```bash
+   yes | conda create -n agents python=3.10
+   conda activate agents
+   pip install -U llama_stack
+
+   # Start the server on localhost:8321
+   llama stack run starter
+   ```
+
+3. Install required Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Overview
+This folder teaches the fundamental building blocks of Llama Stack, including client setup, chat completions, vector databases, and tool integration. These examples cover the core APIs and concepts needed to build AI applications.
+
+## Learning Objectives
+- Initialize and connect to a Llama Stack server
+- Perform chat completions with streaming support
+- Customize model behavior with system prompts
+- Create and manage vector stores for semantic search
+- Register and use custom tools with agents
+- Integrate MCP (Model Context Protocol) tools
+
+## Demos
+
+### Demo 1: Client Setup
+**File**: `01_client_setup.py`
+
+**Concepts**: LlamaStackClient initialization, server health checks, connection management
+
+**Description**: Validates your connection to a Llama Stack server by performing a health check. This is the foundational step for all subsequent examples.
+
+**Run**:
 ```bash
 python -m examples.01_foundations.01_client_setup localhost 8321
 ```
 
-### Chat Completion (`02_chat_completion.py`)
+### Demo 2: Chat Completion
+**File**: `02_chat_completion.py`
 
-Basic inference with chat completions using the Llama Stack client.
+**Concepts**: Chat completions API, model selection, streaming vs non-streaming responses, message formatting
 
+**Description**: Demonstrates basic inference using the chat completions API. Shows how to send user messages to a model and receive responses, with support for both streaming and non-streaming modes.
+
+**Run**:
 ```bash
+# Basic chat completion
 python -m examples.01_foundations.02_chat_completion localhost 8321 --prompt "Hello"
 
 # Stream tokens as they arrive
 python -m examples.01_foundations.02_chat_completion localhost 8321 --prompt "Hello" --stream
 ```
 
-### System Prompts (`03_system_prompts.py`)
+### Demo 3: System Prompts
+**File**: `03_system_prompts.py`
 
-Customize the system prompt for a single-turn chat.
+**Concepts**: System prompts, instruction customization, model behavior control, single-turn conversations
 
+**Description**: Shows how to customize the system prompt to control model behavior and personality for single-turn chat interactions.
+
+**Run**:
 ```bash
+# Use default system prompt
 python -m examples.01_foundations.03_system_prompts localhost 8321 --prompt "Hello"
 
-# Override the system prompt
+# Override with custom system prompt
 python -m examples.01_foundations.03_system_prompts localhost 8321 --system_prompt "You are concise." --prompt "Hello"
 ```
 
-### Vector DB Basics (`04_vector_db_basics.py`)
+### Demo 4: Vector DB Basics
+**File**: `04_vector_db_basics.py`
 
-Register a vector store, add a document, and run a search.
+**Concepts**: Vector store creation, document embedding, vector search, semantic similarity
 
+**Description**: Introduces vector databases by creating a vector store, adding a document, and running a semantic search query.
+
+**Run**:
 ```bash
+# Use default text and query
 python -m examples.01_foundations.04_vector_db_basics localhost 8321
 
 # Provide custom text and query
 python -m examples.01_foundations.04_vector_db_basics localhost 8321 --text "Llama Stack unifies AI services." --query "What does Llama Stack do?"
 ```
 
-### Insert Documents (`05_insert_documents.py`)
+### Demo 5: Insert Documents
+**File**: `05_insert_documents.py`
 
-Create (or reuse) a vector store and insert documents from URLs or a local directory.
+**Concepts**: Document ingestion, file uploads, URL-based insertion, vector store persistence, chunking strategies
 
+**Description**: Demonstrates how to create or reuse a vector store and populate it with documents from URLs or local directories.
+
+**Run**:
 ```bash
+# Insert documents from URLs
 python -m examples.01_foundations.05_insert_documents localhost 8321
 
 # Insert files from a local directory
@@ -55,27 +116,39 @@ python -m examples.01_foundations.05_insert_documents localhost 8321 --file_dir 
 python -m examples.01_foundations.05_insert_documents localhost 8321 --vector_store_id <vector-store-id>
 ```
 
-### Search Vectors (`06_search_vectors.py`)
+### Demo 6: Search Vectors
+**File**: `06_search_vectors.py`
 
-Insert documents into a vector store and run a vector search.
+**Concepts**: Vector search queries, similarity scoring, result ranking, chunk retrieval
 
+**Description**: Inserts documents into a vector store and demonstrates how to run vector search queries to retrieve relevant content.
+
+**Run**:
 ```bash
 python -m examples.01_foundations.06_search_vectors localhost 8321 --query "What does Llama Stack do?"
 ```
- 
-### Tool Registration (`07_tool_registration.py`)
 
-Register custom tools (calculator, ticker data, web search) for an agent.
+### Demo 7: Tool Registration
+**File**: `07_tool_registration.py`
 
+**Concepts**: Client-side tool registration, function calling, custom tool implementation, agent tool integration
+
+**Description**: Shows how to register custom Python functions (calculator, stock ticker, web search) as tools that agents can call during conversations.
+
+**Run**:
 ```bash
-export TAVILY_SEARCH_API_KEY=...
+export TAVILY_SEARCH_API_KEY=your_key_here
 python -m examples.01_foundations.07_tool_registration localhost 8321
 ```
 
-### MCP Tools (`08_mcp_tools.py`)
+### Demo 8: MCP Tools
+**File**: `08_mcp_tools.py`
 
-Start a local MCP server and register its tools with Llama Stack.
+**Concepts**: Model Context Protocol (MCP), MCP servers, tool groups, remote tool registration
 
+**Description**: Demonstrates how to start a local MCP server and register its tools with Llama Stack for use in agent workflows.
+
+**Run**:
 ```bash
 # Terminal 1: start the MCP server (requires: pip install mcp)
 python -m examples.01_foundations.08_mcp_tools serve

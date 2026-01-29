@@ -1,100 +1,132 @@
-# Llama Stack Agents Examples
-
-This directory contains example scripts demonstrating different types of agents using the Llama Stack framework.
+# Agents
 
 ## Setup Instructions
 
 1. Set API keys for external services:
-
-This documentaion shows how to work with fireworks.ai as the inference provider. Get your fireworks API key for model inference from [here](https://fireworks.ai/account/api-keys)
    ```bash
-   # For enabling agents with web search capabilities
-   # Get Tavily API keys -- https://docs.tavily.com/documentation/quickstart
+   # For web search capabilities
+   # Get Tavily API keys from https://docs.tavily.com/documentation/quickstart
    export TAVILY_SEARCH_API_KEY=your_key_here
    ```
-2. Start the Llama Stack server locally
+
+2. Start the Llama Stack server locally:
    ```bash
    yes | conda create -n agents python=3.10
    conda activate agents
    pip install -U llama_stack
-   
-   # this will install all the dependencies to start a local llama stack server
-   # pointing to fireworks for model inference
-   llama stack build --template fireworks
-   
-   # this will start a llama stack server on localhost:8321
-   llama stack run fireworks 
+
+   # Start the server on localhost:8321
+   llama stack run starter
    ```
+
 3. Install required Python dependencies:
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+## Overview
+This folder teaches how to build conversational agents using the Llama Stack Agent API. These examples demonstrate different agent capabilities including chat, multimodal processing, document grounding, custom tools, RAG integration, reasoning patterns, and multi-agent coordination.
 
-## Available Examples
+## Learning Objectives
+- Create and configure conversational agents
+- Implement multimodal agents that process images
+- Build agents that reference and retrieve from documents
+- Integrate custom tools with agents
+- Combine RAG with agent workflows
+- Implement ReACT (Reasoning and Acting) patterns
+- Coordinate multiple specialized agents
 
-### Simple Chat Bot (`01_simple_agent_chat.py`)
+## Demos
 
-A basic chatbot with web search capabilities. Shows how to create a simple agent with built-in tools.
+### Demo 1: Simple Agent Chat
+**File**: `01_simple_agent_chat.py`
 
+**Concepts**: Agent API, agent sessions, web search integration, safety shields, stateful conversations, tool-enabled agents
+
+**Description**: Creates a basic conversational agent with web search capabilities and safety shields. Shows how to set up agent sessions for multi-turn conversations and configure safety features.
+
+**Run**:
 ```bash
 python -m examples.04_agents.01_simple_agent_chat --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Multimodal Chat (`02_chat_multimodal.py`)
+### Demo 2: Multimodal Chat
+**File**: `02_chat_multimodal.py`
 
-Demonstrates how to create an agent with multimodal capabilities
+**Concepts**: Multimodal agents, image processing, vision capabilities, image-text interactions, multimodal messages
 
+**Description**: Demonstrates how to create an agent with multimodal capabilities that can process and understand both text and images in conversations.
+
+**Run**:
 ```bash
 python -m examples.04_agents.02_chat_multimodal --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Chat with Documents (`03_chat_with_documents.py`)
+### Demo 3: Chat with Documents
+**File**: `03_chat_with_documents.py`
 
-Demonstrates how to create an agent that can reference and retrieve information from attached documents.
+**Concepts**: Document-grounded agents, document attachment, file_search tool, agent-level RAG, context-aware responses
 
+**Description**: Shows how to create an agent that can reference and retrieve information from attached documents using the file_search tool for document-grounded conversations.
+
+**Run**:
 ```bash
 python -m examples.04_agents.03_chat_with_documents --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Custom Tools Integration (`04_agent_with_tools.py`)
+### Demo 4: Agent with Tools
+**File**: `04_agent_with_tools.py`
 
-Shows how to integrate custom tools with your agent, such as a calculator, stock ticker data, and custom search capabilities.
+**Concepts**: Custom tool integration, calculator tool, stock ticker tool, web search tool, function calling, tool registration
 
+**Description**: Demonstrates how to integrate custom tools (calculator, stock ticker data, search capabilities) with an agent, enabling it to perform specialized tasks beyond text generation.
+
+**Run**:
 ```bash
 python -m examples.04_agents.04_agent_with_tools --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### RAG Agent (`05_rag_agent.py`)
+### Demo 5: RAG Agent
+**File**: `05_rag_agent.py`
 
-Demonstrates Retrieval-Augmented Generation (RAG) using vector databases for efficient information retrieval from document collections.
+**Concepts**: RAG-enabled agents, vector database integration, document retrieval, knowledge-grounded generation, agent-RAG patterns
 
+**Description**: Implements a RAG agent that uses vector databases for efficient information retrieval from document collections, combining conversational abilities with document search.
+
+**Run**:
 ```bash
 python -m examples.04_agents.05_rag_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### ReACT Agent (`06_react_agent.py`)
+### Demo 6: ReACT Agent
+**File**: `06_react_agent.py`
 
-Implements a ReACT (Reasoning and Acting) agent that can perform multi-step reasoning and take actions based on those reasoning steps.
+**Concepts**: ReACT pattern (Reasoning and Acting), multi-step reasoning, action planning, iterative problem solving, thought-action-observation cycles
 
+**Description**: Implements a ReACT (Reasoning and Acting) agent that performs multi-step reasoning and takes actions based on those reasoning steps, demonstrating iterative problem-solving.
+
+**Run**:
 ```bash
 python -m examples.04_agents.06_react_agent --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
-### Agent Routing (`07_agent_routing.py`)
+### Demo 7: Agent Routing
+**File**: `07_agent_routing.py`
 
-Coordinates multiple specialized agents and synthesizes their outputs.
+**Concepts**: Multi-agent systems, agent coordination, specialized agents, output synthesis, agent orchestration, task delegation
 
+**Description**: Coordinates multiple specialized agents and synthesizes their outputs, demonstrating how to build multi-agent systems where different agents handle different aspects of a task.
+
+**Run**:
 ```bash
 python -m examples.04_agents.07_agent_routing --host localhost --port 8321 --model_id meta-llama/Llama-3.3-70B-Instruct
 ```
 
 ## Usage Tips
 
-- All scripts accept `--host` and `--port` parameters to specify the Llama Stack server connection.
-- You can specify a particular model using the `--model_id` parameter (as shown in the examples above).
-- If no model is specified, the scripts will automatically select an available model.
+- All scripts accept `--host` and `--port` parameters to specify the Llama Stack server connection
+- You can specify a particular model using the `--model_id` parameter (as shown in the examples above)
+- If no model is specified, the scripts will automatically select an available model
 - Look at `01_simple_agent_chat` for an example of how to automatically pick an available safety shield for the agent
 
 For more information on the Llama Stack framework, refer to the [official documentation](https://github.com/meta-llama/llama-stack).
-
