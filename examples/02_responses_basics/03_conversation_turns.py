@@ -16,7 +16,7 @@ import fire
 from llama_stack_client import LlamaStackClient
 from termcolor import colored
 
-from examples.agents.utils import check_model_is_available, get_any_available_chat_model
+from examples.shared.utils import check_model_is_available, get_any_available_chat_model
 
 try:
     from dotenv import load_dotenv

@@ -17,7 +17,7 @@ from llama_stack_client import Agent, LlamaStackClient
 
 from termcolor import colored
 
-from examples.agents.utils import get_any_available_model
+from examples.shared.utils import get_any_available_model
 from .utils import data_url_from_file
 
 load_dotenv()

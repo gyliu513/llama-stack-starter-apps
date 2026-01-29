@@ -11,7 +11,7 @@ import fire
 from llama_stack_client import LlamaStackClient, Agent, AgentEventLogger
 from termcolor import colored
 
-from .utils import check_model_is_available, get_any_available_chat_model
+from examples.shared.utils import check_model_is_available, get_any_available_chat_model
 
 
 def main(host: str, port: int, model_id: str | None = None):

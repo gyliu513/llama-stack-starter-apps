@@ -12,7 +12,7 @@ from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.lib.agents.react.agent import ReActAgent
 from termcolor import colored
 
-from .utils import can_model_chat, check_model_is_available, get_any_available_chat_model
+from examples.shared.utils import can_model_chat, check_model_is_available, get_any_available_chat_model
 
 
 def torchtune(query: str = "torchtune"):

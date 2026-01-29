@@ -12,7 +12,7 @@ import fire
 from llama_stack_client import LlamaStackClient
 from termcolor import colored
 
-from .utils import (
+from examples.shared.utils import (
     build_context,
     download_documents,
     check_model_is_available,

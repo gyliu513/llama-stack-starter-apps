@@ -18,7 +18,7 @@ import fire
 from llama_stack_client import LlamaStackClient
 from termcolor import colored
 
-from examples.agents.utils import (
+from examples.shared.utils import (
     build_context,
     can_model_chat,
     check_model_is_available,

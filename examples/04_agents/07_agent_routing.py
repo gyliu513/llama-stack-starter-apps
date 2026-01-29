@@ -14,7 +14,7 @@ from examples.client_tools.ticker_data import get_ticker_data
 from examples.client_tools.web_search import WebSearchTool
 from llama_stack_client import Agent, LlamaStackClient
 
-from .utils import can_model_chat, check_model_is_available, get_any_available_chat_model
+from examples.shared.utils import can_model_chat, check_model_is_available, get_any_available_chat_model
 
 
 def _resolve_web_tool():
