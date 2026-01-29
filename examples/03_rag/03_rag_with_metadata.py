@@ -1,5 +1,14 @@
 """
-RAG with metadata filtering using file_search.
+Demo: RAG with Metadata
+
+Description:
+This demo teaches how to use metadata filtering to retrieve documents from specific sources or with specific attributes.
+
+Learning Objectives:
+- Attach metadata attributes to documents in vector stores
+- Filter search results using metadata filters
+- Control which documents are retrieved based on attributes
+- Build source-aware RAG systems
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

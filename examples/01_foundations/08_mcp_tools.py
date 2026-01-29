@@ -1,5 +1,14 @@
 """
-Register and use MCP tools.
+Demo: MCP Tools
+
+Description:
+This demo teaches how to set up and use Model Context Protocol (MCP) servers to expose tools to Llama Stack.
+
+Learning Objectives:
+- Start an MCP server with custom tools
+- Register MCP endpoints as toolgroups with Llama Stack
+- Invoke remote MCP tools through the tool runtime
+- Manage toolgroup lifecycle (register, use, unregister)
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

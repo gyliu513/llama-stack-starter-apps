@@ -1,5 +1,14 @@
 """
-RAG with multiple vector stores.
+Demo: Multi-Source RAG
+
+Description:
+This demo teaches how to query across multiple vector stores to combine information from different document sources.
+
+Learning Objectives:
+- Create and manage multiple vector stores
+- Attach different documents to separate vector stores
+- Query across multiple vector stores simultaneously with file_search
+- Combine information from diverse document sources
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

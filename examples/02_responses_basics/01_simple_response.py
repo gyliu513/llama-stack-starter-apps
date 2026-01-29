@@ -1,5 +1,14 @@
 """
-Basic Responses API example.
+Demo: Simple Response
+
+Description:
+This demo teaches how to use the Responses API for simple text generation with instructions and user input.
+
+Learning Objectives:
+- Use the Responses API to generate text completions
+- Configure response instructions to control assistant behavior
+- Understand the difference between Responses API and Chat Completions API
+- Handle model selection and validation for response generation
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

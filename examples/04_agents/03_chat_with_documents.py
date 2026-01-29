@@ -4,6 +4,19 @@
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
 
+"""
+Demo: Chat with Documents
+
+Description:
+This demo teaches how to build conversational agents that can answer questions about uploaded documents using vector search.
+
+Learning Objectives:
+- Upload and index documents in vector stores for agent access
+- Perform vector search to retrieve relevant context for queries
+- Inject retrieved context into agent instructions
+- Build document-aware conversational agents
+"""
+
 import tempfile
 import time
 from pathlib import Path

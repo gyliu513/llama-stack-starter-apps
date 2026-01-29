@@ -1,5 +1,14 @@
 """
-Register custom tools for an agent.
+Demo: Tool Registration
+
+Description:
+This demo teaches how to register and use custom client-side tools with agents for function calling capabilities.
+
+Learning Objectives:
+- Register custom Python functions as agent tools
+- Create agents with tool-calling capabilities
+- Handle tool execution during agent conversations
+- Differentiate between client-side and server-side tools
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

@@ -1,5 +1,14 @@
 """
-Insert documents into a vector store.
+Demo: Insert Documents
+
+Description:
+This demo teaches how to insert multiple documents into a vector store from local files or URLs, with chunking strategies.
+
+Learning Objectives:
+- Upload documents from local directories or remote URLs
+- Configure chunking strategies for document processing
+- Handle asynchronous document attachment with status polling
+- Manage vector store file attachments with error handling
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

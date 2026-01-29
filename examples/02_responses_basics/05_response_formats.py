@@ -1,5 +1,14 @@
 """
-Structured outputs with JSON mode and JSON schema.
+Demo: Response Formats
+
+Description:
+This demo teaches how to generate structured outputs using JSON mode and JSON schema validation.
+
+Learning Objectives:
+- Use JSON mode to ensure valid JSON output
+- Define and enforce JSON schemas for structured data
+- Understand the difference between json_object and json_schema formats
+- Generate machine-readable structured responses
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.

@@ -3,6 +3,20 @@
 #
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
+
+"""
+Demo: Agent with Tools
+
+Description:
+This demo teaches how to create agents with multiple custom client-side tools for specialized tasks.
+
+Learning Objectives:
+- Register multiple client-side tools with an agent
+- Enable agents to automatically select and execute appropriate tools
+- Combine calculator, web search, and stock ticker tools in one agent
+- Build multi-capability agents with tool orchestration
+"""
+
 import os
 import fire
 from termcolor import colored

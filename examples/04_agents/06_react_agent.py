@@ -3,6 +3,20 @@
 #
 # This source code is licensed under the terms described in the LICENSE file in
 # the root directory of this source tree.
+
+"""
+Demo: ReAct Agent
+
+Description:
+This demo teaches how to use the ReAct (Reasoning and Acting) pattern for iterative tool use and problem solving.
+
+Learning Objectives:
+- Create ReAct agents for multi-step reasoning
+- Combine web search with custom tools in ReAct workflow
+- Understand the ReAct pattern for tool orchestration
+- Build agents that reason through complex tasks step-by-step
+"""
+
 import os
 import uuid
 

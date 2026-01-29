@@ -1,5 +1,14 @@
 """
-Hybrid search: vector search + web search in one response.
+Demo: Hybrid Search
+
+Description:
+This demo teaches how to combine file_search (local vector store) and web_search (real-time web data) for comprehensive answers.
+
+Learning Objectives:
+- Combine multiple search tools in a single workflow
+- Retrieve context from both local documents and the web
+- Synthesize information from diverse sources
+- Build hybrid RAG systems with local and external knowledge
 """
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.
