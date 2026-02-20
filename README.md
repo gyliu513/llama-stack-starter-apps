@@ -2,6 +2,8 @@
 
 [![Discord](https://img.shields.io/discord/1257833999603335178)](https://discord.gg/llama-stack)
 
+## NOTE: The demos here are being moved to https://github.com/opendatahub-io/llama-stack-demos/tree/main/demos
+
 This repo shows examples of applications built on top of [Llama Stack](https://github.com/meta-llama/llama-stack). Starting with Llama 3.1, you can build agentic applications capable of:
 
 - Breaking down tasks and performing multi-step reasoning
