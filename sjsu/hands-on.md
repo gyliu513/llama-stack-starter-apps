@@ -56,6 +56,12 @@ ollama pull llama3.2:3b
 ollama run llama3.2:3b --keepalive 60m
 ```
 
+### Clone The Code
+
+```bash
+git clone git@github.com:opendatahub-io/llama-stack-demos.git
+```
+
 ### Environment Setup
 
 First, install [`uv`](https://docs.astral.sh/uv/getting-started/installation/), a fast Python package manager.
