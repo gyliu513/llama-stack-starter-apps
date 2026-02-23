@@ -37,39 +37,6 @@ graph LR
 | 70-85 min | **04: Agents** | Autonomous Agents | Simple Agent |
 | 85-90 min | **Wrap-up** | Next Steps & Projects | - |
 
-### Session Flow
-
-```mermaid
-gantt
-    title 90-Minute Hands-On Session
-    dateFormat mm
-    axisFormat %M min
-
-    section Setup
-    Environment & Connection     :done, setup, 00, 10m
-
-    section Module 01
-    Chat Completion              :active, m1a, 10, 5m
-    Vector Search                :m1b, 15, 15m
-
-    section Module 02
-    Response API Concepts        :m2a, 30, 3m
-    Tool Calling Demo            :m2b, 33, 12m
-
-    section Module 03
-    RAG Pipeline                 :m3a, 45, 10m
-    Multi-Source RAG             :m3b, 55, 8m
-    Hands-On Exercise            :crit, m3c, 63, 7m
-
-    section Module 04
-    Simple Agent                 :m4a, 70, 5m
-    Document Agent               :m4b, 75, 5m
-    ReACT Agent                  :m4c, 80, 5m
-
-    section Wrap-up
-    Summary & Next Steps         :done, wrap, 85, 5m
-```
-
 ---
 
 ## ⚡ Quick Start (10 minutes)
@@ -140,7 +107,7 @@ OLLAMA_URL=http://localhost:11434/v1 llama stack run starter
 ```bash
 # In your main terminal
 cd demos
-python -m 01_foundations.01_client_setup localhost 8321
+python -m demos.01_foundations.01_client_setup localhost 8321
 ```
 
 ✅ **Checkpoint**: You should see connection successful message
@@ -153,7 +120,7 @@ python -m 01_foundations.01_client_setup localhost 8321
 
 **What is Llama Stack?**
 - Unified framework for building AI apps
-- Provides: Models, Vector DB, Tools, Agents
+- Provides: Models, Vector DB, Tools, Agents etc.
 - Works with multiple providers (Ollama, Together, etc.)
 
 **Core Components:**
@@ -188,7 +155,7 @@ graph TB
 
 **Run the demo:**
 ```bash
-python -m 01_foundations.02_chat_completion localhost 8321 \
+python -m demos.01_foundations.02_chat_completion localhost 8321 \
   --prompt "Explain what Llama Stack is in one sentence"
 ```
 
@@ -200,7 +167,7 @@ python -m 01_foundations.02_chat_completion localhost 8321 \
 **Try it yourself:**
 ```bash
 # Change the prompt
-python -m 01_foundations.02_chat_completion localhost 8321 \
+python -m demos.01_foundations.02_chat_completion localhost 8321 \
   --prompt "Write a haiku about AI"
 ```
 
@@ -214,13 +181,13 @@ python -m 01_foundations.02_chat_completion localhost 8321 \
 **Create a vector store:**
 ```bash
 # 1. Create vector database
-python -m 01_foundations.04_vector_db_basics localhost 8321
+python -m demos.01_foundations.04_vector_db_basics localhost 8321
 
 # 2. Insert sample documents
-python -m 01_foundations.05_insert_documents localhost 8321
+python -m demos.01_foundations.05_insert_documents localhost 8321
 
 # 3. Search for information
-python -m 01_foundations.06_search_vectors localhost 8321 \
+python -m demos.01_foundations.06_search_vectors localhost 8321 \
   --query "how to train a model"
 ```
 
@@ -351,7 +318,7 @@ sequenceDiagram
 
 **Run the demo:**
 ```bash
-python -m 02_responses_basics.02_tool_calling localhost 8321 \
+python -m demos.02_responses_basics.02_tool_calling localhost 8321 \
   --prompt "What is the weather in San Francisco?"
 ```
 
@@ -397,7 +364,7 @@ response = client.responses.create(
 **Try it yourself:**
 ```bash
 # Ask something requiring current information
-python -m 02_responses_basics.02_tool_calling localhost 8321 \
+python -m demos.02_responses_basics.02_tool_calling localhost 8321 \
   --prompt "What are the latest AI developments this week?"
 ```
 
@@ -463,7 +430,7 @@ graph TB
 
 **Run the demo:**
 ```bash
-python -m 03_rag.01_simple_rag localhost 8321
+python -m demos.03_rag.01_simple_rag localhost 8321
 ```
 
 **What's happening:**
@@ -496,7 +463,7 @@ response = client.responses.create(
 
 **Run the demo:**
 ```bash
-python -m 03_rag.02_multi_source_rag localhost 8321
+python -m demos.03_rag.02_multi_source_rag localhost 8321
 ```
 
 **What this shows:**
@@ -664,7 +631,7 @@ mindmap
 
 **Run the demo:**
 ```bash
-python -m 04_agents.01_simple_agent_chat localhost 8321
+python -m demos.04_agents.01_simple_agent_chat localhost 8321
 ```
 
 **What you'll see:**
@@ -681,7 +648,7 @@ python -m 04_agents.01_simple_agent_chat localhost 8321
 
 **Run the demo:**
 ```bash
-python -m 04_agents.03_chat_with_documents localhost 8321
+python -m demos.04_agents.03_chat_with_documents localhost 8321
 ```
 
 **What this shows:**
@@ -712,7 +679,7 @@ sequenceDiagram
 
 **Run the demo:**
 ```bash
-python -m 04_agents.06_react_agent localhost 8321
+python -m demos.04_agents.06_react_agent localhost 8321
 ```
 
 **What is ReACT Agent?**
@@ -990,9 +957,9 @@ graph TD
 OLLAMA_URL=http://localhost:11434/v1 llama stack run starter
 
 # Run demos (from demos/ directory)
-python -m 01_foundations.02_chat_completion localhost 8321
-python -m 03_rag.01_simple_rag localhost 8321
-python -m 04_agents.01_simple_agent_chat localhost 8321
+python -m demos.01_foundations.02_chat_completion localhost 8321
+python -m demos.03_rag.01_simple_rag localhost 8321
+python -m demos.04_agents.01_simple_agent_chat localhost 8321
 ```
 
 ### Code Templates
