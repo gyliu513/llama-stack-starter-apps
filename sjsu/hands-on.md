@@ -193,23 +193,53 @@ python -m demos.01_foundations.06_search_vectors localhost 8321 \
 
 **How it works:**
 
+The vector search process consists of two phases: **indexing** (storing documents) and **retrieval** (searching for relevant content).
+
 ```mermaid
 graph LR
-    Doc[Document] --> Embed1[Embedding Model]
-    Embed1 --> Vec1[Vector]
+    Doc[Document] --> Chunk[Chunking]
+    Chunk --> Embed1[Embedding Model]
+    Embed1 --> Vec1[Vectors]
     Vec1 --> Store[Vector Store]
 
     Query[Query] --> Embed2[Embedding Model]
     Embed2 --> Vec2[Query Vector]
     Vec2 --> Search[Find Similar Vectors]
     Store --> Search
-    Search --> Results[Relevant Documents]
+    Search --> Results[Relevant Chunks]
 
     style Doc fill:#e1f5ff
+    style Chunk fill:#f0e6ff
     style Query fill:#e1f5ff
     style Store fill:#d4edda
     style Results fill:#fff3cd
 ```
+
+**Phase 1 — Indexing (top row):**
+
+1. **Document → Chunking**: A raw document is first split into smaller pieces called **chunks**. This is necessary because embedding models have a token limit and because smaller, focused chunks produce more precise search results. In our demo code, chunking is configured via `chunking_strategy` when attaching a file to a vector store:
+    ```python
+    chunking_strategy={
+        "type": "static",
+        "static": {"max_chunk_size_tokens": 512, "chunk_overlap_tokens": 64},
+    }
+    ```
+    - `max_chunk_size_tokens`: each chunk is at most 512 tokens
+    - `chunk_overlap_tokens`: adjacent chunks share 64 tokens of overlap, so context at chunk boundaries is not lost
+2. **Chunking → Embedding Model**: Each chunk is fed into an embedding model (e.g. `all-MiniLM-L6-v2`), which reads its semantic meaning.
+3. **Embedding Model → Vectors**: The model converts each chunk into a high-dimensional numerical vector (e.g. a list of 384 floats). Semantically similar texts produce vectors that are close together in vector space. One document produces **multiple** vectors — one per chunk.
+4. **Vectors → Vector Store**: All chunk vectors are stored in a vector database for later retrieval.
+
+**Phase 2 — Retrieval (bottom row):**
+
+5. **Query → Embedding Model**: When a user asks a question, the query text goes through the *same* embedding model to produce a query vector.
+6. **Query Vector → Find Similar Vectors**: The system compares the query vector against all stored chunk vectors using a similarity metric (e.g. cosine similarity).
+7. **Vector Store → Find Similar Vectors**: The stored chunk vectors are loaded from the vector store to participate in the comparison.
+8. **Find Similar Vectors → Relevant Chunks**: The chunks whose vectors are most similar to the query vector are returned as results — not whole documents, but the most relevant *pieces*.
+
+**Key insight**: This approach finds documents by *meaning*, not by keyword matching. For example, a query "how to train a model" would match a chunk about "fine-tuning neural networks" even though they share no exact words — because their vectors are close in semantic space.
+
+**Why chunking matters**: Without chunking, a long document becomes a single vector that averages the meaning of all its content, diluting the signal. With chunking, each piece gets its own focused vector, making retrieval far more precise.
 
 ✅ **Checkpoint**: Can you search for "machine learning"?
 
@@ -786,6 +816,202 @@ graph TD
 
 ✅ **Checkpoint**: Can you explain when to use ReACT pattern?
 
+<details>
+<summary><strong>Sample Answer</strong> (click to expand)</summary>
+
+**When to use the ReACT pattern:**
+
+The **ReACT (Reasoning + Acting)** pattern is best suited for tasks where the AI needs to **autonomously plan, execute multiple steps, and adapt** based on intermediate results. Use it when:
+
+1. **The task requires multi-step reasoning** — e.g., "Research topic X, then compare it with topic Y, then give me a recommendation." The agent needs to break this down into sub-tasks and execute them in sequence.
+
+2. **Multiple tool calls are needed** — If the task requires calling more than one tool (e.g., search the web, then query a database, then do a calculation), ReACT lets the agent decide *which* tools to call and *in what order*, rather than you hard-coding the orchestration.
+
+3. **The path isn't known in advance** — The agent's next step depends on what it discovers. For example, if the first search returns no results, the agent can rephrase the query and try again. This adaptive loop (Think → Act → Observe → Repeat) is the core advantage.
+
+4. **Complex research or analysis** — Tasks like "find the best open-source LLM for my use case" require gathering information from multiple sources, comparing options, and synthesizing a conclusion.
+
+**When NOT to use ReACT:**
+
+- **Simple Q&A** → Use Chat Completions API (faster, cheaper)
+- **Single tool call** → Use Response API (simpler, no reasoning loop overhead)
+- **Deterministic workflows** → If you already know the exact steps, hard-code them instead of adding agent overhead
+
+**In short:** Use ReACT when the task is *open-ended*, requires *multiple tools*, and benefits from the agent *thinking about what to do next* at each step.
+
+</details>
+
+### Demo 4: Multi-Agent Routing (10 min)
+
+**Why Multi-Agent?**
+
+A single agent can only do so much. When tasks span multiple domains — research, math, finance — a **multi-agent system** routes each subtask to a specialized agent, then synthesizes the results.
+
+**Run the demo:**
+```bash
+python -m demos.04_agents.07_agent_routing localhost 8321
+```
+
+**How it works:**
+
+```mermaid
+graph TB
+    Task["Complex Task:<br/>'Prepare a product update:<br/>1) Find Llama Stack news<br/>2) Compute 45×12÷6<br/>3) Get GOOG closing price'"]
+
+    Task --> Router{Router:<br/>Classify each subtask}
+
+    Router -->|"Contains 'find', 'update'"| Research["Research Agent<br/>🔍 web_search"]
+    Router -->|"Contains math operators"| Math["Math Agent<br/>🧮 calculator"]
+    Router -->|"Contains 'stock', 'price'"| Finance["Finance Agent<br/>📈 get_ticker_data"]
+
+    Research --> R1[Subtask result 1]
+    Math --> R2[Subtask result 2]
+    Finance --> R3[Subtask result 3]
+
+    R1 --> Coordinator[General Agent<br/>synthesizes all results]
+    R2 --> Coordinator
+    R3 --> Coordinator
+
+    Coordinator --> Final[Unified Answer<br/>to User]
+
+    style Task fill:#e1f5ff
+    style Router fill:#fff3cd
+    style Research fill:#d4edda
+    style Math fill:#d4edda
+    style Finance fill:#d4edda
+    style Coordinator fill:#fff3cd
+    style Final fill:#ffd6d6
+```
+
+**Step-by-step walkthrough:**
+
+1. **Define specialized agents** — each with its own instructions and tools:
+    ```python
+    agents = {
+        "general": Agent(client, model=model_id,
+            instructions="You are a helpful assistant."),
+        "math": Agent(client, model=model_id,
+            instructions="You are a math assistant. Use tools for calculations.",
+            tools=[calculator]),
+        "finance": Agent(client, model=model_id,
+            instructions="You are a finance assistant. Use tools for ticker data.",
+            tools=[get_ticker_data]),
+        "research": Agent(client, model=model_id,
+            instructions="You are a research assistant. Use web search when helpful.",
+            tools=[web_tool]),
+    }
+    ```
+
+2. **Route subtasks** — a routing function classifies each subtask by keywords and sends it to the right agent:
+    ```python
+    def _route_subtask(prompt, web_available):
+        lower = prompt.lower()
+        if any(t in lower for t in ["update", "news", "search", "find"]):
+            return "research"
+        if any(t in lower for t in ["stock", "ticker", "price"]):
+            return "finance"
+        if any(t in lower for t in ["calculate", "sum", "math"]):
+            return "math"
+        return "general"
+    ```
+
+3. **Execute subtasks** — each subtask runs on its specialized agent:
+    ```python
+    for subtask in subtasks:
+        route = _route_subtask(subtask, web_available)
+        agent = agents[route]
+        response = agent.create_turn(
+            messages=[{"role": "user", "content": subtask}],
+            session_id=sessions[route], stream=False,
+        )
+    ```
+
+4. **Synthesize** — the general agent combines all subtask results into a single coherent answer:
+    ```python
+    coordinator.create_turn(
+        messages=[{"role": "user", "content": synthesis_prompt}],
+        session_id=coordinator_session, stream=False,
+    )
+    ```
+
+**Multi-Agent Communication Patterns:**
+
+| Pattern | How it works | Example |
+|---------|-------------|---------|
+| **Sequential** | Agent A → Agent B → Agent C | Data pipeline: collect → analyze → report |
+| **Parallel** | Multiple agents work simultaneously | Search multiple sources at once |
+| **Hierarchical** | Coordinator delegates to specialists | This demo: router → specialists → synthesis |
+
+**When to use Multi-Agent vs Single Agent:**
+
+| Scenario | Single Agent | Multi-Agent |
+|----------|-------------|-------------|
+| Simple Q&A | ✅ | Overkill |
+| One domain, multiple tools | ✅ | Optional |
+| Cross-domain tasks | Struggles | ✅ |
+| Tasks requiring different expertise | Mediocre quality | ✅ Specialized quality |
+| Production systems at scale | Hard to maintain | ✅ Modular, testable |
+
+✅ **Checkpoint**: Can you think of a real-world scenario where you'd use 3+ specialized agents?
+
+<details>
+<summary><strong>Sample Answer: E-Commerce Customer Support System</strong> (click to expand)</summary>
+
+**Scenario**: An online retailer receives thousands of customer messages daily. Each message could be about orders, product questions, returns, or billing. A single agent would need expertise in all areas and access to every tool — making it slow, error-prone, and hard to maintain. Instead, use 4+ specialized agents:
+
+```mermaid
+graph TB
+    Customer[Customer Message:<br/>I got the wrong item,<br/>need a refund and want<br/>to know if the correct<br/>item is in stock]
+
+    Customer --> Triage[Triage Agent<br/>Classifies intent]
+
+    Triage -->|wrong item| Returns[Returns Agent<br/>returns_api, order_lookup]
+    Triage -->|refund| Billing[Billing Agent<br/>payment_api, refund_tool]
+    Triage -->|in stock?| Inventory[Inventory Agent<br/>inventory_api, product_search]
+
+    Returns --> R1[Process return request]
+    Billing --> R2[Initiate refund]
+    Inventory --> R3[Check stock status]
+
+    R1 --> Coordinator[Coordinator Agent<br/>Combines into one reply]
+    R2 --> Coordinator
+    R3 --> Coordinator
+
+    Coordinator --> Reply[Unified Reply:<br/>Return label sent<br/>Refund initiated<br/>Correct item reordered]
+
+    style Customer fill:#e1f5ff
+    style Triage fill:#fff3cd
+    style Returns fill:#d4edda
+    style Billing fill:#d4edda
+    style Inventory fill:#d4edda
+    style Coordinator fill:#fff3cd
+    style Reply fill:#ffd6d6
+```
+
+**Why this needs multiple agents:**
+
+| Agent | Specialty | Tools | Why separate? |
+|-------|-----------|-------|---------------|
+| **Triage** | Intent classification | None (LLM only) | Fast, lightweight — no tools needed |
+| **Returns** | Return policies & logistics | `order_lookup`, `returns_api` | Knows return windows, shipping labels, policies |
+| **Billing** | Payments & refunds | `payment_api`, `refund_tool` | Access to sensitive payment systems, needs strict guardrails |
+| **Inventory** | Stock & product info | `inventory_api`, `product_search` | Real-time warehouse data, product catalog |
+| **Coordinator** | Response synthesis | None | Merges results into a friendly, unified customer reply |
+
+**Benefits over a single agent:**
+- **Security**: Only the Billing Agent has access to payment systems
+- **Accuracy**: Each agent is tuned for its domain with focused instructions
+- **Maintainability**: Update return policies? Only change the Returns Agent
+- **Scalability**: Add a new "Shipping Agent" without touching existing agents
+- **Testability**: Test each agent independently
+
+**Other real-world examples with 3+ agents:**
+- **Healthcare**: Symptom checker + Medical records + Appointment scheduler + Insurance verifier
+- **DevOps**: Log analyzer + Metrics agent + Incident responder + Runbook executor
+- **Legal**: Case research + Contract reviewer + Compliance checker + Document drafter
+
+</details>
+
 ---
 
 ## 🎯 Putting It All Together
@@ -1193,10 +1419,10 @@ Before you leave, make sure you can:
 
 ---
 
-**Session Created For**: San Jose State University
-**Duration**: 90 minutes
-**Format**: Hands-on coding session
-**Modules Covered**: Foundations → Responses → RAG → Agents
+- **Session Created For**: San Jose State University
+- **Duration**: 90 minutes
+- **Format**: Hands-on coding session
+- **Modules Covered**: Foundations → Responses → RAG → Agents
 
 **Good luck and have fun building AI applications!** 🤖✨
 
