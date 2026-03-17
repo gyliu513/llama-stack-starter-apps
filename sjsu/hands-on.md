@@ -112,7 +112,6 @@ OLLAMA_URL=http://localhost:11434/v1 llama stack run starter
 
 ```bash
 # In your main terminal
-cd demos
 python -m demos.01_foundations.01_client_setup localhost 8321
 ```
 
